@@ -1,0 +1,11 @@
+SNAPSHOT_FOLDER=/home/magnus/.snapshots
+SOURCE=/home/magnus/
+RSYNC_FILTER_CONF=../etc/filter.conf
+
+HOURLY_MAX_AGE=1
+DAILY_MAX_AGE=7
+WEEKLY_MAX_AGE=$[3*30]
+
+OFFLINE_DESTINATION=rsync://rsync@192.168.0.150/Backup
+OFFLINE_PASSWORD=abcd
+
