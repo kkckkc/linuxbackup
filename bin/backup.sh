@@ -1,6 +1,14 @@
 #!/bin/bash
 
-source `dirname $(readlink -f $0)`/../etc/settings.conf
+source $( dirname $(readlink -f $0) )/../etc/settings.conf
+
+if [ "$RUN_ON_BATTERIES" == "false" ]; then
+	onbatteries=$(cat /proc/acpi/ac_adapter/AC/state | grep off-line | wc -l)
+	if [ "$onbatteries" == "1" ]; then
+		echo "Backup running on batteries disabled"
+		exit
+	fi
+fi
 
 dateDiff () {
     case $1 in
@@ -78,11 +86,11 @@ archive "${SNAPSHOT_FOLDER}/hourly" "${SNAPSHOT_FOLDER}/weekly" $[7*24]
 
 # Remove all old backups
 find "${SNAPSHOT_FOLDER}/hourly" -maxdepth 1 -type d \
-	-name "20*" -ctime $HOURLY_MAX_AGE -exec rm -rf {} \;
+	-name "20*" -ctime +$HOURLY_MAX_AGE -exec rm -rf {} \;
 find "${SNAPSHOT_FOLDER}/daily" -maxdepth 1 -type d \
-	-name "20*" -ctime $DAILY_MAX_AGE -exec rm -rf {} \;
+	-name "20*" -ctime +$DAILY_MAX_AGE -exec rm -rf {} \;
 find "${SNAPSHOT_FOLDER}/weekly" -maxdepth 1 -type d \
-	-name "20*" -ctime $WEEKLY_MAX_AGE -exec rm -rf {} \;
+	-name "20*" -ctime +$WEEKLY_MAX_AGE -exec rm -rf {} \;
 
 cp /tmp/rsync.log "$dest"
 

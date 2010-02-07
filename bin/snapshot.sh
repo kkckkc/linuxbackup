@@ -32,22 +32,22 @@ log() {
 
 ref() {
 	cd $SNAPSHOT_FOLDER
-	folder=`find . -maxdepth 2 -name "$1 $2" -type d | head -n 1`
+	folder=$( find . -maxdepth 2 -name "$1 $2" -type d | head -n 1 )
 	echo $SNAPSHOT_FOLDER/${folder:2}/$3
 	cd - > /dev/null
 }
 
 view() {
-	less "`ref $1 $2 $3`"
+	less "$( ref $1 $2 $3 )"
 }
 
 case $1 in
-	list)   list;;
-	size)   size;;
-	log)   log $2;;
-	ref)   ref $2 $3 $4;;
-	view)   view $2 $3 $4;;
-    *)    echo "Need to specify either list, size, log, ref";;
+	list)	list;;
+	size)	size;;
+	log)	log $2;;
+	ref)	ref $2 $3 $4;;
+	view)	view $2 $3 $4;;
+	*)		echo "Need to specify either list, size, log, ref";;
 esac
 
 
